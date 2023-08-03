@@ -1,0 +1,123 @@
+Site Composer:
+https://getcomposer.org/
+
+Site Packagist:
+https://packagist.org/
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                        INSTALANDO COMPOSER
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+1- Iniciar o Composer:
+composer init
+
+------------------------------------------------
+
+2- Adicionar a psr-4 no composer.json:
+"autoload": {
+    "psr-4": {
+           "App\\": "App/"
+       }
+}
+
+------------------------------------------------
+
+3- Instalar dependencias de um projeto
+composer install
+
+------------------------------------------------
+
+4- Ver os pacotes dos projetos
+composer.lock
+
+------------------------------------------------
+
+5- Atualizar as alterações feitas no composer.json
+composer dump-autoload / dumpautoload
+
+------------------------------------------------
+
+6- CodeSniffer - Lib para verificar se o código está seguindo os padrões da psr-12
+composer require --dev squizlabs/php_codesniffer
+
+Comando para analizar o código:
+vendor\bin\phpcs --standard=PSR12 App\
+
+Documentação PSR-12:
+https://www.php-fig.org/psr/psr-12/
+
+------------------------------------------------
+
+7- Phan - Lib para verificar erros no código
+composer require --dev phan/phan
+
+Comando para analizar o código:
+vendor\bin\phan --allow-polyfill-parser App\BuscadorCursos.php
+
+------------------------------------------------
+
+8- Adicionando scripts para executar comandos
+composer.json
+"scripts": {
+    "test": "phpunit tests\\TestBuscadorDeCursos.php",
+    "cs": "phpcs --standard=PSR12 App\\",
+    "phan": "phan --allow-polyfill-parser"
+}
+
+Executar no terminal:
+composer test
+composer cs
+composer phan
+
+------------------------------------------------
+
+9- Rodar uma lista de scripts
+composer.json
+"scripts": {
+    "test": "phpunit tests\\TestBuscadorDeCursos.php",
+    "cs": "phpcs --standard=PSR12 App\\",
+    "phan": "phan --allow-polyfill-parser",
+    "check": [
+        "@phan",
+        "@cs",
+        "@test"
+    ]
+}
+
+Comando:
+composer check
+
+------------------------------------------------
+
+10- Adicionar descrição aos scripts
+"scripts-descriptions": {
+    "check": "Roda as verificações dos códigos. PHAN, PHPCS e PHPUNIT"
+}
+
+Ver comandos do composer:
+composer list
+
+------------------------------------------------
+
+Eventos em scripts:
+
+Script definition example:
+
+{
+    "scripts": {
+        "post-update-cmd": "MyVendor\\MyClass::postUpdate",
+        "post-package-install": [
+            "MyVendor\\MyClass::postPackageInstall"
+        ],
+        "post-install-cmd": [
+            "MyVendor\\MyClass::warmCache",
+            "phpunit -c app/"
+        ],
+        "post-autoload-dump": [
+            "MyVendor\\MyClass::postAutoloadDump"
+        ],
+        "post-create-project-cmd": [
+            "php -r \"copy('config/local-example.php', 'config/local.php');\""
+        ]
+    }
+}
